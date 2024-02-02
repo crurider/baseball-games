@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,13 +14,23 @@ namespace BaseballGames
 {
     public partial class DollaView : Form
     {
-        public const double NORMAL_PER_PITCH = 0.0543;
-        public const double PRO_PER_PITCH = 0.0681;
+        public double NORMAL_PER_PITCH { get; set; }
+        public double PRO_PER_PITCH { get; set; }
 
         public DollaView()
         {
             InitializeComponent();
+            LoadConfig();
             SelectData();
+        }
+
+        private void LoadConfig()
+        {
+            var jsonConfig = File.ReadAllText("appsettings.json");
+            var configObject = JsonSerializer.Deserialize<Configuration>(jsonConfig);
+
+            NORMAL_PER_PITCH = configObject.configuration.NORMAL_PER_PITCH;
+            PRO_PER_PITCH = configObject.configuration.PRO_PER_PITCH;
         }
 
         private void SelectData()
