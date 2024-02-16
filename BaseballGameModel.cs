@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseballGames
-{
-    public class BaseballGameModel
-    {
+namespace BaseballGames {
+    public class BaseballGameModel {
         public int Id { get; set; }
         public DateTime Datum { get; set; }
         public int GameId { get; set; }

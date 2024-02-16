@@ -10,28 +10,20 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BaseballGames
-{
-    public partial class DollaView : Form
-    {
-        public DollaView()
-        {
+namespace BaseballGames {
+    public partial class DollaView : Form {
+        public DollaView() {
             InitializeComponent();
             SelectData();
         }
 
-        private void SelectData()
-        {
-            using (var connection = new SQLiteConnection("Data Source=BaseballGames.db"))
-            {
+        private void SelectData() {
+            using (var connection = new SQLiteConnection("Data Source=BaseballGames.db")) {
                 connection.Open();
 
-                using (var command = new SQLiteCommand("SELECT count(*) FROM BaseballGames WHERE strftime('%Y-%m', Datum) = strftime('%Y-%m', 'now');", connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
+                using (var command = new SQLiteCommand("SELECT count(*) FROM BaseballGames WHERE strftime('%Y-%m', Datum) = strftime('%Y-%m', 'now');", connection)) {
+                    using (var reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
                             int brojTekmi = reader.GetInt32(0);
                             lblBrojUtakmicaValue.Text = brojTekmi.ToString();
                         }
@@ -43,12 +35,9 @@ namespace BaseballGames
                 double totalSoft = 0;
                 double totalDolla = 0;
 
-                using (var command = new SQLiteCommand("SELECT pitches, pro, soft, amount FROM BaseballGames WHERE strftime('%Y-%m', Datum) = strftime('%Y-%m', 'now');", connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
+                using (var command = new SQLiteCommand("SELECT pitches, pro, soft, amount FROM BaseballGames WHERE strftime('%Y-%m', Datum) = strftime('%Y-%m', 'now');", connection)) {
+                    using (var reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
                             int pitches = reader.GetInt32(0);
                             bool pro = reader.GetBoolean(1);
                             bool soft = reader.GetBoolean(2);
@@ -96,6 +85,11 @@ namespace BaseballGames
                 adapter.Fill(dt);
                 dataGridView.DataSource = dt;
             }
+        }
+
+        // clear selection hack
+        private void DollaView_Load(object sender, EventArgs e) {
+            dataGridView.ClearSelection();
         }
     }
 }

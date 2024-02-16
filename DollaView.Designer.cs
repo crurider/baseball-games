@@ -30,6 +30,7 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DollaView));
             lblBrojUtakmica = new Label();
             lblPro = new Label();
@@ -50,7 +51,7 @@
             // 
             lblBrojUtakmica.AutoSize = true;
             lblBrojUtakmica.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            lblBrojUtakmica.Location = new Point(12, 9);
+            lblBrojUtakmica.Location = new Point(33, 10);
             lblBrojUtakmica.Name = "lblBrojUtakmica";
             lblBrojUtakmica.Size = new Size(89, 17);
             lblBrojUtakmica.TabIndex = 0;
@@ -60,7 +61,7 @@
             // 
             lblPro.AutoSize = true;
             lblPro.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            lblPro.Location = new Point(65, 37);
+            lblPro.Location = new Point(86, 38);
             lblPro.Name = "lblPro";
             lblPro.Size = new Size(36, 17);
             lblPro.TabIndex = 1;
@@ -70,7 +71,7 @@
             // 
             lblCollege.AutoSize = true;
             lblCollege.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            lblCollege.Location = new Point(37, 54);
+            lblCollege.Location = new Point(58, 55);
             lblCollege.Name = "lblCollege";
             lblCollege.Size = new Size(64, 17);
             lblCollege.TabIndex = 2;
@@ -80,7 +81,7 @@
             // 
             lblSoft.AutoSize = true;
             lblSoft.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            lblSoft.Location = new Point(60, 71);
+            lblSoft.Location = new Point(81, 72);
             lblSoft.Name = "lblSoft";
             lblSoft.Size = new Size(41, 17);
             lblSoft.TabIndex = 3;
@@ -90,7 +91,7 @@
             // 
             lblTotal.AutoSize = true;
             lblTotal.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            lblTotal.Location = new Point(12, 104);
+            lblTotal.Location = new Point(33, 105);
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(89, 17);
             lblTotal.TabIndex = 4;
@@ -110,7 +111,7 @@
             // 
             lblBrojUtakmicaValue.AutoSize = true;
             lblBrojUtakmicaValue.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lblBrojUtakmicaValue.Location = new Point(107, 9);
+            lblBrojUtakmicaValue.Location = new Point(128, 10);
             lblBrojUtakmicaValue.Name = "lblBrojUtakmicaValue";
             lblBrojUtakmicaValue.Size = new Size(0, 17);
             lblBrojUtakmicaValue.TabIndex = 7;
@@ -119,7 +120,7 @@
             // 
             lblProValue.AutoSize = true;
             lblProValue.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lblProValue.Location = new Point(107, 37);
+            lblProValue.Location = new Point(128, 38);
             lblProValue.Name = "lblProValue";
             lblProValue.Size = new Size(0, 17);
             lblProValue.TabIndex = 8;
@@ -128,7 +129,7 @@
             // 
             lblCollegeValue.AutoSize = true;
             lblCollegeValue.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lblCollegeValue.Location = new Point(107, 54);
+            lblCollegeValue.Location = new Point(128, 55);
             lblCollegeValue.Name = "lblCollegeValue";
             lblCollegeValue.Size = new Size(0, 17);
             lblCollegeValue.TabIndex = 9;
@@ -137,7 +138,7 @@
             // 
             lblSoftValue.AutoSize = true;
             lblSoftValue.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lblSoftValue.Location = new Point(107, 71);
+            lblSoftValue.Location = new Point(128, 72);
             lblSoftValue.Name = "lblSoftValue";
             lblSoftValue.Size = new Size(0, 17);
             lblSoftValue.TabIndex = 10;
@@ -147,7 +148,7 @@
             lblTotalValue.AutoSize = true;
             lblTotalValue.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             lblTotalValue.ForeColor = Color.Green;
-            lblTotalValue.Location = new Point(107, 104);
+            lblTotalValue.Location = new Point(128, 105);
             lblTotalValue.Name = "lblTotalValue";
             lblTotalValue.Size = new Size(0, 17);
             lblTotalValue.TabIndex = 11;
@@ -159,22 +160,25 @@
             dataGridView.AllowUserToResizeColumns = false;
             dataGridView.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dataGridView.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridView.Enabled = false;
             dataGridView.Location = new Point(12, 165);
             dataGridView.MultiSelect = false;
@@ -182,8 +186,8 @@
             dataGridView.ReadOnly = true;
             dataGridView.RowHeadersVisible = false;
             dataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView.RowsDefaultCellStyle = dataGridViewCellStyle4;
             dataGridView.RowTemplate.Height = 25;
             dataGridView.ScrollBars = ScrollBars.None;
             dataGridView.ShowCellErrors = false;
@@ -214,6 +218,7 @@
             MaximizeBox = false;
             Name = "DollaView";
             Text = "Pregled zarade";
+            Load += DollaView_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
