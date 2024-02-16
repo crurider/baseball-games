@@ -14,5 +14,6 @@ namespace BaseballGames
         public int Pitches { get; set; }
         public bool Pro { get; set; }
         public bool Soft { get; set; }
+        public double Amount { get; set; }
     }
 }

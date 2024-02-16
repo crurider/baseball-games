@@ -14,23 +14,10 @@ namespace BaseballGames
 {
     public partial class DollaView : Form
     {
-        public double NORMAL_PER_PITCH { get; set; }
-        public double PRO_PER_PITCH { get; set; }
-
         public DollaView()
         {
             InitializeComponent();
-            LoadConfig();
             SelectData();
-        }
-
-        private void LoadConfig()
-        {
-            var jsonConfig = File.ReadAllText("appsettings.json");
-            var configObject = JsonSerializer.Deserialize<Configuration>(jsonConfig);
-
-            NORMAL_PER_PITCH = configObject.configuration.NORMAL_PER_PITCH;
-            PRO_PER_PITCH = configObject.configuration.PRO_PER_PITCH;
         }
 
         private void SelectData()
@@ -39,14 +26,14 @@ namespace BaseballGames
             {
                 connection.Open();
 
-                using (var command = new SQLiteCommand("SELECT count(*) \r\nFROM BaseballGames \r\nWHERE strftime('%Y-%m', Datum) = strftime('%Y-%m', 'now');", connection))
+                using (var command = new SQLiteCommand("SELECT count(*) FROM BaseballGames WHERE strftime('%Y-%m', Datum) = strftime('%Y-%m', 'now');", connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             int brojTekmi = reader.GetInt32(0);
-                            lblBrojUtakmica.Text += brojTekmi.ToString();
+                            lblBrojUtakmicaValue.Text = brojTekmi.ToString();
                         }
                     }
                 }
@@ -56,7 +43,7 @@ namespace BaseballGames
                 double totalSoft = 0;
                 double totalDolla = 0;
 
-                using (var command = new SQLiteCommand("SELECT pitches, pro, soft FROM BaseballGames WHERE strftime('%Y-%m', Datum) = strftime('%Y-%m', 'now');", connection))
+                using (var command = new SQLiteCommand("SELECT pitches, pro, soft, amount FROM BaseballGames WHERE strftime('%Y-%m', Datum) = strftime('%Y-%m', 'now');", connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
@@ -65,20 +52,49 @@ namespace BaseballGames
                             int pitches = reader.GetInt32(0);
                             bool pro = reader.GetBoolean(1);
                             bool soft = reader.GetBoolean(2);
+                            double amount = reader.GetDouble(3);
 
-                            if (pro && !soft) { totalPro += pitches * PRO_PER_PITCH; }
-                            else if (soft && !pro) { totalSoft += pitches * NORMAL_PER_PITCH; }
-                            else totalCollege += pitches * NORMAL_PER_PITCH;
+                            if (pro && !soft) totalPro += amount;
+                            else if (soft && !pro) totalSoft += amount;
+                            else totalCollege += amount;
 
                             totalDolla = (totalPro + totalSoft + totalCollege);
                         }
                     }
                 }
 
-                lblCollege.Text += totalCollege.ToString("0.00") + " $";
-                lblPro.Text += totalPro.ToString("0.00") + " $";
-                lblSoft.Text += totalSoft.ToString("0.00") + " $";
-                lblTotal.Text += totalDolla.ToString("0.00") + " $";
+                lblCollegeValue.Text = totalCollege.ToString("0.00") + " $";
+                lblProValue.Text = totalPro.ToString("0.00") + " $";
+                lblSoftValue.Text = totalSoft.ToString("0.00") + " $";
+                lblTotalValue.Text = totalDolla.ToString("0.00") + " $";
+
+                string last3query = @"
+                    SELECT
+                            CASE
+                                WHEN strftime('%m', Datum) = '01' THEN 'Januar'
+                                WHEN strftime('%m', Datum) = '02' THEN 'Februar'
+                                WHEN strftime('%m', Datum) = '03' THEN 'Mart'
+                                WHEN strftime('%m', Datum) = '04' THEN 'April'
+                                WHEN strftime('%m', Datum) = '05' THEN 'Maj'
+                                WHEN strftime('%m', Datum) = '06' THEN 'Jun'
+                                WHEN strftime('%m', Datum) = '07' THEN 'Jul'
+                                WHEN strftime('%m', Datum) = '08' THEN 'Avgust'
+                                WHEN strftime('%m', Datum) = '09' THEN 'Septembar'
+                                WHEN strftime('%m', Datum) = '10' THEN 'Oktobar'
+                                WHEN strftime('%m', Datum) = '11' THEN 'Novembar'
+                                ELSE 'Decembar'
+                            END AS Mesec,
+                            CAST(SUM(amount) AS TEXT) || ' $' AS Zarada
+                    FROM BaseballGames
+                    WHERE Datum < date('now', '-1 month')
+                            AND Datum >= date('now', '-4 month')
+                    GROUP BY strftime('%Y', Datum), strftime('%m', Datum)
+                    ORDER BY strftime('%Y', Datum) DESC, strftime('%m', Datum) DESC;";
+
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(last3query, connection);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                dataGridView.DataSource = dt;
             }
         }
     }

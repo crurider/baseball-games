@@ -1,15 +1,19 @@
 ﻿using System.Data.SQLite;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace BaseballGames
 {
     public partial class BaseballGames : Form
     {
+        public double NORMAL_PER_PITCH { get; set; }
+        public double PRO_PER_PITCH { get; set; }
         bool inputValid;
 
         public BaseballGames()
         {
             InitializeComponent();
+            LoadConfig();
             InitializeDatabase();
         }
 
@@ -19,11 +23,19 @@ namespace BaseballGames
             {
                 connection.Open();
 
-                using (var command = new SQLiteCommand("CREATE TABLE IF NOT EXISTS BaseballGames (Id INTEGER PRIMARY KEY AUTOINCREMENT, Datum TEXT, GameId INTEGER, Pitches INTEGER, Pro INTEGER, Soft INTEGER);", connection))
+                using (var command = new SQLiteCommand("CREATE TABLE IF NOT EXISTS BaseballGames (Id INTEGER PRIMARY KEY AUTOINCREMENT, Datum TEXT, GameId INTEGER, Pitches INTEGER, Pro INTEGER, Soft INTEGER, Amount REAL);", connection))
                 {
                     command.ExecuteNonQuery();
                 }
             }
+        }
+
+        private void LoadConfig() {
+            var jsonConfig = File.ReadAllText("appsettings.json");
+            var configObject = JsonSerializer.Deserialize<Configuration>(jsonConfig);
+
+            NORMAL_PER_PITCH = configObject.configuration.NORMAL_PER_PITCH;
+            PRO_PER_PITCH = configObject.configuration.PRO_PER_PITCH;
         }
 
         private void InsertData()
@@ -60,17 +72,21 @@ namespace BaseballGames
 
                     if (inputValid)
                     {
+                        if (model.Pro) { model.Amount = model.Pitches * PRO_PER_PITCH; }
+                        else model.Amount = model.Pitches * NORMAL_PER_PITCH;
+
                         using (var transaction = connection.BeginTransaction())
                         {
                             try
                             {
-                                using (var command = new SQLiteCommand("INSERT INTO BaseballGames (Datum, GameId, Pitches, Pro, Soft) VALUES (@Datum, @GameId, @Pitches, @Pro, @Soft);", connection, transaction))
+                                using (var command = new SQLiteCommand("INSERT INTO BaseballGames (Datum, GameId, Pitches, Pro, Soft, Amount) VALUES (@Datum, @GameId, @Pitches, @Pro, @Soft, @Amount);", connection, transaction))
                                 {
                                     command.Parameters.AddWithValue("@Datum", model.Datum);
                                     command.Parameters.AddWithValue("@GameId", model.GameId);
                                     command.Parameters.AddWithValue("@Pitches", model.Pitches);
                                     command.Parameters.AddWithValue("@Pro", model.Pro);
                                     command.Parameters.AddWithValue("@Soft", model.Soft);
+                                    command.Parameters.AddWithValue("@Amount", model.Amount);
 
                                     command.ExecuteNonQuery();
                                 }
