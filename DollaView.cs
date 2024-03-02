@@ -59,26 +59,28 @@ namespace BaseballGames {
 
                 string last3query = @"
                     SELECT
-                            CASE
-                                WHEN strftime('%m', Datum) = '01' THEN 'Januar'
-                                WHEN strftime('%m', Datum) = '02' THEN 'Februar'
-                                WHEN strftime('%m', Datum) = '03' THEN 'Mart'
-                                WHEN strftime('%m', Datum) = '04' THEN 'April'
-                                WHEN strftime('%m', Datum) = '05' THEN 'Maj'
-                                WHEN strftime('%m', Datum) = '06' THEN 'Jun'
-                                WHEN strftime('%m', Datum) = '07' THEN 'Jul'
-                                WHEN strftime('%m', Datum) = '08' THEN 'Avgust'
-                                WHEN strftime('%m', Datum) = '09' THEN 'Septembar'
-                                WHEN strftime('%m', Datum) = '10' THEN 'Oktobar'
-                                WHEN strftime('%m', Datum) = '11' THEN 'Novembar'
-                                ELSE 'Decembar'
-                            END AS Mesec,
-                            CAST(SUM(amount) AS TEXT) || ' $' AS Zarada
-                    FROM BaseballGames
-                    WHERE Datum < date('now', '-1 month')
-                            AND Datum >= date('now', '-4 month')
-                    GROUP BY strftime('%Y', Datum), strftime('%m', Datum)
-                    ORDER BY strftime('%Y', Datum) DESC, strftime('%m', Datum) DESC;";
+                        CASE
+                            WHEN strftime('%m', Calendar.Datum) = '01' THEN 'Januar'
+                            WHEN strftime('%m', Calendar.Datum) = '02' THEN 'Februar'
+                            WHEN strftime('%m', Calendar.Datum) = '03' THEN 'Mart'
+                            WHEN strftime('%m', Calendar.Datum) = '04' THEN 'April'
+                            WHEN strftime('%m', Calendar.Datum) = '05' THEN 'Maj'
+                            WHEN strftime('%m', Calendar.Datum) = '06' THEN 'Jun'
+                            WHEN strftime('%m', Calendar.Datum) = '07' THEN 'Jul'
+                            WHEN strftime('%m', Calendar.Datum) = '08' THEN 'Avgust'
+                            WHEN strftime('%m', Calendar.Datum) = '09' THEN 'Septembar'
+                            WHEN strftime('%m', Calendar.Datum) = '10' THEN 'Oktobar'
+                            WHEN strftime('%m', Calendar.Datum) = '11' THEN 'Novembar'
+                            ELSE 'Decembar'
+                        END AS Mesec,
+                        COALESCE(CAST(ROUND(SUM(amount), 2) AS TEXT) || ' $', '0 $') AS Zarada
+                    FROM (
+                        SELECT date('now', 'start of month', '-' || (ROW_NUMBER() OVER ()) || ' month') AS Datum
+                        FROM (SELECT 1 UNION SELECT 2 UNION SELECT 3)
+                    ) AS Calendar
+                    LEFT JOIN BaseballGames ON strftime('%Y-%m', BaseballGames.Datum, 'start of month') = strftime('%Y-%m', Calendar.Datum)
+                    GROUP BY Mesec
+                    ORDER BY strftime('%Y-%m', Calendar.Datum) DESC;";
 
                 SQLiteDataAdapter adapter = new SQLiteDataAdapter(last3query, connection);
                 DataTable dt = new DataTable();
