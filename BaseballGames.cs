@@ -6,6 +6,7 @@ namespace BaseballGames {
     public partial class BaseballGames : Form {
         public double NORMAL_PER_PITCH { get; set; }
         public double PRO_PER_PITCH { get; set; }
+
         bool inputValid;
 
         public BaseballGames() {
@@ -26,10 +27,10 @@ namespace BaseballGames {
 
         private void LoadConfig() {
             var jsonConfig = File.ReadAllText("appsettings.json");
-            var configObject = JsonSerializer.Deserialize<Configuration>(jsonConfig);
+            var cfg = JsonSerializer.Deserialize<Configuration>(jsonConfig);
 
-            NORMAL_PER_PITCH = configObject.configuration.NORMAL_PER_PITCH;
-            PRO_PER_PITCH = configObject.configuration.PRO_PER_PITCH;
+            NORMAL_PER_PITCH = cfg.NORMAL_PER_PITCH;
+            PRO_PER_PITCH = cfg.PRO_PER_PITCH;
         }
 
         private void InsertData() {
